@@ -70,7 +70,7 @@ const SignUpPage = () => {
                 <LogIn className="size-7 text-primary " />
               </div>
               <h1 className="text-2xl font-bold mt-2">Log In</h1>
-              <p className="text-base-content/60 text-xl">
+              <p className="text-base-content/60 text-xl text-primary">
                 Get back to your account. Your connections are waiting!
               </p>
             </div>

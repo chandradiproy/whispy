@@ -9,14 +9,7 @@ export const useAuthStore = create((set)=>({
     isLoggingIn:false,
     isUpdatingProfile:false,
     isCheckingAuth:true,
-/*************  ✨ Codeium Command ⭐  *************/
-    /**
-     * Checks if the user is authenticated and sets the `authUser` accordingly
-     * 
-     * @function
-     * @returns {Promise<void>}
-     */
-/******  59db89be-594a-4cc3-9e3b-12046c3f9987  *******/
+    onlineUser : [],
     checkAuth: async() =>{
         try {
             const response = axiosInstance.get("/auth/check");
@@ -60,7 +53,7 @@ export const useAuthStore = create((set)=>({
         const response = await axiosInstance.post("/auth/login", data);
         set({authUser:response.data});
         toast.success("Logged in successfully");
-        window.location("/")
+
         }catch(err){
             console.error("Error in login ; ", err.message);
             toast.error(err.response.data.message)
