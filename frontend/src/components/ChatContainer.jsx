@@ -4,12 +4,16 @@ import { useEffect } from "react";
 import { ChatHeader } from "./ChatHeader";
 import { MessageInput } from "./MessageInput";
 import MessageSkeleton from "./MessageSkeleton";
+import { useAuthStore } from "../store/useAuthStore";
+import { formateMessageTime } from "../lib/utils";
 const ChatContainer = () => {
   const {messages, getMessages, isMessagesLoading, selectedUser} = useChatStore();
+  const {authUser} = useAuthStore();
+  const defaultAvatar = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
   useEffect(()=>{
-    getMessages(selectedUser.id);
-  },[getMessages, selectedUser.id]);
-
+    getMessages(selectedUser._id);
+  },[getMessages, selectedUser._id]);
+  // console.log(messages);
   if(isMessagesLoading) return (
     <div className="flex flex-1 flex-col overflow-auto">
       <ChatHeader/>
@@ -18,65 +22,90 @@ const ChatContainer = () => {
     </div>
   )
   return (
-    // <div className="flex-1 flex flex-col bg-base-100 p-6 md:p-6">
-    //   {/* Chat Header */}
-    //   <div className="flex items-center justify-between py-3 border-b border-base-300 mb-4">
-    //     <div className="flex items-center gap-3">
-    //       <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-primary-content font-medium">
-    //         JD
-    //       </div>
-    //       <div>
-    //         <h3 className="font-semibold text-base-content">John Doe</h3>
-    //         <p className="text-xs text-base-content/70">Online</p>
-    //       </div>
-    //     </div>
-    //     <button className="text-primary hover:text-primary/80">
-    //       {/* Add an icon for more options */}
-    //       <span className="material-icons">more_horiz</span>
-    //     </button>
-    //   </div>
-
-    //   {/* Chat Messages */}
-    //   <div className="flex-1 overflow-y-auto mb-4">
-    //     <div className="space-y-4">
-    //       <div className="flex justify-start">
-    //         <div className="bg-base-200 p-3 rounded-xl max-w-[70%] shadow-sm">
-    //           <p className="text-sm">Hey, how are you doing?</p>
-    //           <p className="text-[10px] text-base-content/70 mt-1">10:30 AM</p>
+    
+    // <div className="flex-1 flex flex-col overflow-auto">
+    //   <ChatHeader/>
+      
+    //   <div className="flex flex-1 overflow-y-auto p-4 space-y-4">
+    //     {messages.map((message) => {return (
+    //       <div
+    //         key={message.id}
+    //         className={`chat ${message.senderId === authUser._id} ? 'chat-end' : 'chat-start'}`}
+    //       >
+    //         <div className="chat-image avatar">
+    //           <div className="size-10 rounded-full border">
+    //             <img 
+    //               src={message.senderId === authUser._id ? authUser.profilePic || defaultAvatar : selectedUser.profilePic || defaultAvatar} 
+    //             />
+    //           </div>
+    //         </div>
+    //         <div className="chat-header">
+    //           <time className="text-xs opacity-50 ml-1">
+    //             {formateMessageTime(message.createdAt)}
+    //           </time>
+    //         </div>
+    //         <div className="chat-bubble flex flex-col">
+    //           {message.iamge && (
+    //             <img 
+    //               src={message.image} 
+    //               alt="Attachment"
+    //               className="sm:max-w-[300px] max-h-[300px] object-cover"
+    //             />
+    //           )}
+    //           {message.text && <p>{message.text}</p>}
     //         </div>
     //       </div>
-    //       <div className="flex justify-end">
-    //         <div className="bg-primary p-3 text-primary-content rounded-xl max-w-[70%] shadow-sm">
-    //           <p className="text-sm">I'm doing great, thanks! How about you?</p>
-    //           <p className="text-[10px] text-primary-content/70 mt-1">10:32 AM</p>
-    //         </div>
-    //       </div>
-    //       {/* More messages can be added here */}
-    //     </div>
+    //     )})}
     //   </div>
 
-    //   {/* Message Input Section */}
-    //   <div className="flex items-center gap-3 p-2 border-t border-base-300 bg-base-100">
-    //     <button className="p-2 rounded-full text-base-content hover:bg-base-200">
-    //       <Paperclip size={18} />
-    //     </button>
-    //     <input
-    //       type="text"
-    //       placeholder="Type a message..."
-    //       className="flex-1 p-2 border border-base-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-    //     />
-    //     <button className="btn btn-primary px-4 py-2 text-sm rounded-lg">
-    //       <Send size={18} />
-    //     </button>
-    //   </div>
+    //   <MessageInput/>
+
     // </div>
+
     <div className="flex-1 flex flex-col overflow-auto">
-      <ChatHeader/>
-      <p>Message...</p>
+    <ChatHeader />
 
-      <MessageInput/>
+    <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      {messages.map((message) => (
+        <div
+          key={message._id}
+          className={`chat ${message.senderId === authUser._id ? "chat-end" : "chat-start"}`}
+          // ref={messageEndRef}
+        >
+          <div className=" chat-image avatar">
+            <div className="size-10 rounded-full border">
+              <img
+                src={
+                  message.senderId === authUser._id
+                    ? authUser.profilePic || defaultAvatar
+                    : selectedUser.profilePic || defaultAvatar
+                }
+                alt="profile pic"
+              />
+            </div>
+          </div>
+          <div className="chat-header mb-1">
+            <time className="text-xs opacity-50 ml-1">
+              {formateMessageTime(message.createdAt)}
+            </time>
+          </div>
+          <div className="chat-bubble flex flex-col">
+          {message.image && (
+  <img
+    src={message.image}
+    alt="Attachment"
+    className="sm:max-w-[300px] max-h-[300px] object-cover"
+  />
+)}
 
+            {message.text && <p>{message.text}</p>}
+          </div>
+        </div>
+      ))}
     </div>
+
+    <MessageInput />
+  </div>
   );
 };
 
