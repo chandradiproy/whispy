@@ -28,7 +28,7 @@ export const ChatHeader = () => {
           <div>
             <h3 className="font-medium">{selectedUser.fullName || "Jhon Doe"}</h3>
             <p className="text-sm text-base-content/70">
-              {onlineUser.includes(selectedUser.id) ? "Active" : "Sleeping"}
+              {onlineUser.includes(selectedUser._id) ? "Active" : "Sleeping"}
             </p>
           </div>
         </div>
