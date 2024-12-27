@@ -10,6 +10,7 @@ import { useAuthStore } from "./store/useAuthStore";
 import { Loader } from "lucide-react";
 import { Toaster } from "react-hot-toast";
 import { useThemeStore } from "./store/useThemeStore";
+import 'font-awesome/css/font-awesome.min.css';
 const App = () => {
   const { authUser, checkAuth, isCheckingAuth, onlineUser } = useAuthStore();
   const { theme } = useThemeStore();

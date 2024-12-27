@@ -4,7 +4,17 @@ import daisyui from "daisyui";
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      animation:{
+        grow: "grow 1.2s infinite ease-in-out",
+      }
+    },
+    keyframes:{
+      grow: {
+        "0%, 100%": { transform: "scale(1)" },
+        "50%": { transform: "scale(1.5)" },
+      },
+    },
   },
   plugins: [daisyui],
   daisyui: {

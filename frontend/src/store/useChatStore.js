@@ -10,12 +10,12 @@ export const useChatStore = create((set,get)=>({
     selectedUser:null,
     isUsersLoading:false,
     isMessagesLoading:false,
-    
+    // activeUserChatId:null,
     getUsers: async () => {
         set({isUsersLoading:true});
         try{
             const res = await axiosInstance.get("/messages/users");
-            toast.success("Users fetched successfully");
+            // toast.success("Users fetched successfully");
             set({users:res.data});
             // console.log(JSON.stringify(res.data));
         }catch(err){
@@ -27,14 +27,15 @@ export const useChatStore = create((set,get)=>({
     },
     getMessages: async (userId)=>{
         set({isMessagesLoading:true});
-        
         try{
             const res = await axiosInstance.get(`/messages/${userId}`);
             // console.log(res.data);
             if(res.data.length === 0){
                 toast.success("No messages found");
             }
+            
             set({messages:res.data});
+            // console.log(JSON.stringify(res.data));
         }catch(err){
             console.error("Error in getMessages ; ", err.message);
             // toast.error(err.response.data.message)
@@ -70,6 +71,39 @@ export const useChatStore = create((set,get)=>({
 
     unsubscribeFromMessages: ()=>{
         const socket = useAuthStore.getState().socket;
+        if(!socket) return;
         socket.off("newMessage");
     },
+
+    markMessageAsSeen: async(messageId)=>{
+        // console.log(messageId);
+        const {selectedUser, messages} = get();
+        const currentUser = useAuthStore.getState().authUser;
+        // console.log(currentUser);
+        
+        const message = messages.find((msg)=>msg._id === messageId);
+        if(!message || message.seenBy.includes(currentUser._id)) return; //If already seen, then return
+
+        const updatedSeenBy = [...message.seenBy, currentUser._id]; //adding the current user's id to the array
+        set({
+            messages: messages.map((msg)=> msg._id === messageId ? {...msg, seenBy:updatedSeenBy} : msg
+            )
+        });
+        const socket = useAuthStore.getState().socket;
+        socket.emit("messageSeen",{
+            messageId,
+            senderId:message.senderId,
+            receiverId:message.receiverId,
+            seenBy:updatedSeenBy
+        });
+        // try{
+        //     const res = await axiosInstance.put(`/messages/markAsSeen`,{messageId});
+        //     console.log(res.data);
+        // }catch(err){
+        //     console.error("Error in markMessageAsSeen ; ", err.message);
+            
+        // }
+        
+
+    }
 }))

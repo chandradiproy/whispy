@@ -49,7 +49,8 @@ export const sendMessage = async (req, res) => {
             senderId,
             receiverId,
             text,
-            image: imgUrl
+            image: imgUrl,
+            seenBy:[],
         })
 
         await newMessage.save();
@@ -64,5 +65,31 @@ export const sendMessage = async (req, res) => {
         res.status(500).json({
             message: "Internal server error. Please try again"
         })
+    }
+};
+export const markMessageAsSeen = async(req,res)=>{
+    try {
+        const {messageId} = req.body; //message id will be passed along with the request body
+        const userId = req.user._id;
+        const message = await Message.findById(messageId);
+        if(!message){
+            return res.status(404).json(
+                {message:"Message not found"}
+            )
+        }
+
+        if(!message.seenBy.includes(userId)){ //adding user id if message is not seen  by the user
+            message.seenBy.push(userId);
+            await message.save();
+        }else{
+            return res.status(400).json({
+                message:"Message is already seen"
+            })
+        }
+    } catch (error) {
+        console.error("Error in markMessageAsSeen controller ; ", error.message);
+        res.status(500).json({
+            message: "Internal server error. Please try again"
+        });
     }
 };
