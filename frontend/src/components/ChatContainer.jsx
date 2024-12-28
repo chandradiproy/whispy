@@ -16,46 +16,17 @@ const ChatContainer = () => {
     selectedUser,
     subscribeToMessages,
     unsubscribeFromMessages,
-    markMessageAsSeen,
+    
   } = useChatStore();
   const { authUser, socket } = useAuthStore();
   const [typingUser, setTypingUser] = useState(null);
   const messageEndRef = useRef(null);
   const messageRefs = useRef([]);
+  const [viewportHeight, setViewportHeight] = useState(window.innerHeight);
   const [fullscreenImage, setFullscreenImage] = useState(null);
   const [isPreviewOpen, setIsPreviewOpen] = useState(true);
   const defaultAvatar =
     "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
-
-  // useEffect(() => {
-  //   const handleIntersection = (entries) => {
-  //     entries.forEach((entry) => {
-  //       if (entry.isIntersecting) {
-  //         const messageId = entry.target.id;
-  //         const message = messages.find((msg) => msg._id === messageId);
-  //         if (message && message.senderId !== authUser._id) {
-  //           // Emit the 'messageSeen' event when the receiver sees the message
-  //           // socket.emit("messageSeen", { messageId, senderId: message.senderId, receiverId: authUser._id });
-  //           markMessageAsSeen(messageId);
-  //         }
-  //       }
-  //     });
-  //   };
-
-  //   const observer = new IntersectionObserver(handleIntersection, {
-  //     threshold: 0.5, // 50% visibility
-  //   });
-
-  //   const validMessageElements = messageRefs.current.filter(
-  //     (el) => el && el instanceof HTMLElement
-  //   );
-
-  //   validMessageElements.forEach((el) => observer.observe(el));
-
-  //   return () => {
-  //     validMessageElements.forEach((el) => observer.unobserve(el));
-  //   };
-  // }, [socket, authUser._id, messages,markMessageAsSeen]);
 
   useEffect(() => {
     if (!socket || !authUser) return;
@@ -83,56 +54,21 @@ const ChatContainer = () => {
       }
     };
   }, [socket, authUser, typingUser]);
+  useEffect(()=>{
+    const updateHeight = ()=> setViewportHeight(window.innerHeight);
+    window.addEventListener("resize", updateHeight);
+    return () => window.removeEventListener("resize", updateHeight);
+  },[])
 
   useEffect(() => {
     if (!selectedUser) return;
     getMessages(selectedUser._id);
     subscribeToMessages();
-    // if(socket){
-    //   socket.on("messageSeen", ({messageId, senderId})=>{
-    //     const updatedMessages = messages.map((msg)=>{
-    //       if(msg._id === messageId){
-    //         return {...msg, seenBy:[...msg.seenBy, senderId]}
-    //       }
-    //       return msg;
-    //     })
-    //     useChatStore.setState({messages:updatedMessages});
-    //   });
-    // }
-
+ 
     return () => {
       unsubscribeFromMessages();
-      //   if(socket){
-      //     socket.off("messageSeen");
-      //   }
     };
   }, [getMessages, selectedUser, subscribeToMessages, unsubscribeFromMessages]);
-
-  // useEffect(() => {
-  //   if (!socket || !authUser) return;
-
-  //   // Listen for the "messageSeen" event from the server
-  //   const handleMessageSeen = ({ messageId, senderId }) => {
-  //     const updatedMessages = messages.map((message) => {
-  //       if (message._id === messageId && message.senderId === senderId) {
-  //         return {
-  //           ...message,
-  //           seenBy: [...message.seenBy, authUser._id], // Add receiver to seenBy list
-  //         };
-  //       }
-  //       return message;
-  //     });
-
-  //     // setMessages(updatedMessages);
-  //   };
-
-  //   socket.on("messageSeen", handleMessageSeen);
-
-  //   return () => {
-  //     socket.off("messageSeen", handleMessageSeen);
-  //   };
-  // }, [socket, authUser, messages]);
-
 
  useEffect(() => {
     // const isSmallScreen = window.matchMedia("(max-width: 768px)").matches;
@@ -140,6 +76,12 @@ const ChatContainer = () => {
       messageEndRef.current.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }
   });
+const handleInputFocus = () => {
+  if (messageEndRef.current) {
+    messageEndRef.current.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }
+};
+
   
 
   //for downloading the uploaded image
@@ -170,7 +112,10 @@ const ChatContainer = () => {
     );
 
   return (
-    <div className="flex-1  flex flex-col overflow-auto">
+    <div className="flex-1  flex flex-col overflow-auto"
+      style={{
+        height: `${viewportHeight}px`,}}
+    >
       <ChatHeader />
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.map((message, index) => (
@@ -277,7 +222,7 @@ const ChatContainer = () => {
           )}
         </div>
       </div>
-      <MessageInput />
+      <MessageInput handleInputFocus={handleInputFocus} />
     </div>
   );
 };

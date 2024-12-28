@@ -4,7 +4,7 @@ import { Image, Send, X } from "lucide-react";
 import { useAuthStore } from "../store/useAuthStore";
 import toast from "react-hot-toast";
 
-export const MessageInput = () => {
+export const MessageInput = ({handleInputFocus}) => {
   const [text, setText] = useState("");
   const [imagePreview, setImagePreview] = useState(null);
   const fileInputRef = React.useRef(null);
@@ -122,6 +122,7 @@ export const MessageInput = () => {
             value={text}
             onChange={(e) => setText(e.target.value)}
             onInput={handleTyping} // Call handleTyping when user types
+            onFocus={handleInputFocus}
           />
 
           <input
