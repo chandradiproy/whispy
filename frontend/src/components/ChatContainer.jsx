@@ -5,6 +5,8 @@ import { MessageInput } from "./MessageInput";
 import MessageSkeleton from "./MessageSkeleton";
 import { useAuthStore } from "../store/useAuthStore";
 import { formateMessageTime } from "../lib/utils";
+import { Download, X } from "lucide-react";
+import toast from "react-hot-toast";
 
 const ChatContainer = () => {
   const {
@@ -20,6 +22,8 @@ const ChatContainer = () => {
   const [typingUser, setTypingUser] = useState(null);
   const messageEndRef = useRef(null);
   const messageRefs = useRef([]);
+  const [fullscreenImage, setFullscreenImage] = useState(null);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(true);
   const defaultAvatar =
     "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
 
@@ -98,9 +102,9 @@ const ChatContainer = () => {
 
     return () => {
       unsubscribeFromMessages();
-    //   if(socket){
-    //     socket.off("messageSeen");
-    //   }
+      //   if(socket){
+      //     socket.off("messageSeen");
+      //   }
     };
   }, [getMessages, selectedUser, subscribeToMessages, unsubscribeFromMessages]);
 
@@ -128,11 +132,30 @@ const ChatContainer = () => {
   //     socket.off("messageSeen", handleMessageSeen);
   //   };
   // }, [socket, authUser, messages]);
-useEffect(()=>{
-  if(messageEndRef.current){
-    messageEndRef.current.scrollIntoView({behavior:"smooth"});
+  useEffect(() => {
+    if (messageEndRef.current) {
+      messageEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  });
+
+  //for downloading the uploaded image
+  const downloadIage = (url,filename) =>{
+    fetch(url)
+      .then((response)=>response.blob())
+      .then((blob)=>{
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = filename || "image.jpg";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      })
+      .catch((error)=>{
+        toast.error("Failed to download: ",error.message);
+      })
   }
-})
+
+
   if (isMessagesLoading)
     return (
       <div className="flex flex-1 flex-col overflow-auto">
@@ -178,7 +201,8 @@ useEffect(()=>{
                 <img
                   src={message.image}
                   alt="Attachment"
-                  className="sm:max-w-[300px] max-h-[300px] object-cover"
+                  className="sm:max-w-[300px] max-h-[300px] p-1 object-cover hover:cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out"
+                  onClick={() => setFullscreenImage(message.image)}
                 />
               )}
 
@@ -204,8 +228,30 @@ useEffect(()=>{
                   </span>
                 </div>
               </div> */}
-              
             </div>
+            {isPreviewOpen && fullscreenImage && (
+              <div className="fixed w-screen inset-0 bg-black bg-opacity-80 flex justify-center items-center backdrop-blur-md z-50">
+                <div className="relative w-screen">
+                  <img
+                    src={message.image}
+                    alt="Fullscreen View"
+                    className="max-w-full max-h-screen object-contain"
+                  />
+                </div>
+                <button
+                  onClick={()=> downloadIage(message.image, `image_${message._id}.jpg`)}
+                  className="absolute size-10 top-5 right-20 bg-gray-700 text-white rounded-full flex items-center justify-center"
+                >
+                  <Download />
+                </button>
+                <button
+                  onClick={() => setFullscreenImage(null)}
+                  className="absolute size-10 top-5 right-5 bg-gray-700 text-white rounded-full flex items-center justify-center"
+                >
+                  <X />
+                </button>
+              </div>
+            )}
           </div>
         ))}
         <div className="typing-indicator flex items-center space-x-1">
