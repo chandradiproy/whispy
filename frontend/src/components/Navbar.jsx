@@ -1,4 +1,4 @@
-import { LogOut, MessageCirclePlus, MessageSquare, Settings, UserRoundPen } from "lucide-react";
+import { Contact, LogOut, MessageCirclePlus, MessageSquare, Settings, UserRoundPen } from "lucide-react";
 import React from "react";
 import { Link } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
@@ -27,6 +27,14 @@ const Navbar = () => {
               <Settings />
               <span className="hidden md:inline">Settings</span>
             </Link>
+            <a
+              href={"https://www.linkedin.com/in/chandradiproy/"}
+              target="_blank"
+              className="btn btn-ghost btn-sm rounded-full"
+            >
+              <Contact />
+              <span className="hidden md:inline">Contact Us</span>
+            </a>
           </div>
           {authUser && (
             <div className="flex gap-2">
