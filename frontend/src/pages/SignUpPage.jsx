@@ -68,8 +68,8 @@ const SignUpPage = () => {
     }
   };
   return (
-    <div className="flex items-center justify-center min-h-screen">
-      <main className="min-h-[80vh] grid lg:grid-cols-2 shadow-xl w-[80vw] mt-14">
+    <div className="flex  justify-center sm:pt-5 pt-1 min-h-screen ">
+      <main className="sm:h-full h-fit grid lg:grid-cols-2  w-[80vw]">
         {/* Left Section Start */}
 
         <aside className=" h-full flex flex-col justify-center gap-y-7 items-center rounded-lg">
@@ -82,7 +82,7 @@ const SignUpPage = () => {
         {/* Left Section Ends */}
 
         {/* Right Section Starts */}
-        <section className="bg-base-300 flex items-center justify-center min-h-[70vh] rounded-lg">
+        <section className="bg-base-300 flex items-center justify-center h-full sm:h-full rounded-lg p-4">
           <div className="w-full p-4 flex flex-col gap-y-4">
             <div className="flex flex-col items-center gap-1 group">
               <div
@@ -100,7 +100,7 @@ const SignUpPage = () => {
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="form-control">
                   <label className="label">
-                    <span className="label-text font-medium">Full Name</span>
+                    <span className="label-text font-medium ">Full Name</span>
                   </label>
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -215,7 +215,7 @@ const SignUpPage = () => {
                   )}
                 </button>
               </form>
-              <div className="text-center mt-2">
+              <div className="text-center mt-2 ">
                 <p className="text-base-content/60">
                   Already have an account?{" "}
                   <Link to="/login" className="underline text-primary">

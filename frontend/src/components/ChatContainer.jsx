@@ -132,11 +132,21 @@ const ChatContainer = () => {
   //     socket.off("messageSeen", handleMessageSeen);
   //   };
   // }, [socket, authUser, messages]);
+
+
+  // useEffect(() => {
+  //   if (messageEndRef.current) {
+  //     messageEndRef.current.scrollIntoView({ behavior: "smooth" });
+  //   }
+  // });
+
   useEffect(() => {
-    if (messageEndRef.current) {
-      messageEndRef.current.scrollIntoView({ behavior: "smooth" });
+    const isSmallScreen = window.matchMedia("(max-width: 768px)").matches;
+    if (messageEndRef.current ) {
+      messageEndRef.current.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }
   });
+  
 
   //for downloading the uploaded image
   const downloadIage = (url,filename) =>{

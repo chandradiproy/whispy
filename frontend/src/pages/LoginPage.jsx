@@ -46,8 +46,8 @@ const SignUpPage = () => {
     }
   };
   return (
-    <div className="flex items-center justify-center min-h-[100vh]">
-      <main className="min-h-[80vh] grid lg:grid-cols-2 shadow-xl w-[80vw]  mt-10">
+    <div className="flex  justify-center min-h-screen  sm:pt-5 pt-1">
+      <main className="h-[80vh] grid lg:grid-cols-2  w-[80vw] ">
         {/* Left Section Start */}
 
         <aside className="min-w-full h-full flex flex-col justify-center gap-y-7 items-center rounded-lg">
@@ -60,7 +60,7 @@ const SignUpPage = () => {
         {/* Left Section Ends */}
 
         {/* Right Section Starts */}
-        <section className="bg-base-300 flex items-center justify-center rounded-lg  min-h-[80vh]">
+        <section className="bg-base-300 flex items-center shadow-xl justify-center rounded-lg  ">
           <div className="w-full p-4 flex flex-col gap-y-4">
             <div className="flex flex-col items-center gap-1 group">
               <div
