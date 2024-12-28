@@ -27,7 +27,9 @@ const App = () => {
     );
   }
   return (
-    <div data-theme={theme}>
+    <div data-theme={theme}
+      className="min-h-screen w-screen bg-base-200 overflow-hidden flex flex-col items-center justify-center"
+    >
       <Navbar />
       <Routes>
         <Route

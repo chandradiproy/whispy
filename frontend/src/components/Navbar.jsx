@@ -9,7 +9,7 @@ const Navbar = () => {
   return (
     <header
       className="w-screen bg-base-100 
-      border-base-300 border-b backdrop-blur-sm h-15 sticky top-0  z-40"
+      border-base-300 border-b backdrop-blur-sm  h-15 sticky top-0  z-40"
     >
       <nav className="h-full w-full flex items-center justify-between p-4">
         <Link to={"/"} className={"flex items-center gap-2"}>

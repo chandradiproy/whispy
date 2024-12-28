@@ -134,14 +134,8 @@ const ChatContainer = () => {
   // }, [socket, authUser, messages]);
 
 
-  // useEffect(() => {
-  //   if (messageEndRef.current) {
-  //     messageEndRef.current.scrollIntoView({ behavior: "smooth" });
-  //   }
-  // });
-
-  useEffect(() => {
-    const isSmallScreen = window.matchMedia("(max-width: 768px)").matches;
+ useEffect(() => {
+    // const isSmallScreen = window.matchMedia("(max-width: 768px)").matches;
     if (messageEndRef.current ) {
       messageEndRef.current.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }
@@ -176,7 +170,7 @@ const ChatContainer = () => {
     );
 
   return (
-    <div className="flex-1 flex flex-col overflow-auto">
+    <div className="flex-1  flex flex-col overflow-auto">
       <ChatHeader />
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.map((message, index) => (
