@@ -47,7 +47,7 @@ const SignUpPage = () => {
   };
   return (
     <div className="flex items-center justify-center min-h-[100vh]">
-      <main className="min-h-[80vh] grid lg:grid-cols-2 shadow-xl w-[80vw] ">
+      <main className="min-h-[80vh] grid lg:grid-cols-2 shadow-xl w-[80vw]  mt-10">
         {/* Left Section Start */}
 
         <aside className="min-w-full h-full flex flex-col justify-center gap-y-7 items-center rounded-lg">
@@ -60,17 +60,17 @@ const SignUpPage = () => {
         {/* Left Section Ends */}
 
         {/* Right Section Starts */}
-        <section className="dark:bg-[linear-gradient(145deg,_#1f1b2e,_#312b45)] bg-[linear-gradient(135deg,_#ffffff,_#f0f4ff)] flex items-center justify-center h-full rounded-lg">
+        <section className="bg-base-300 flex items-center justify-center rounded-lg  min-h-[80vh]">
           <div className="w-full p-4 flex flex-col gap-y-4">
             <div className="flex flex-col items-center gap-1 group">
               <div
-                className="size-12 rounded-xl bg-primary/10 flex items-center justify-center 
+                className="size-12 rounded-xl bg-primary/20 flex items-center justify-center 
                  group-hover:bg-primary/20 transition-colors"
               >
                 <LogIn className="size-7 text-primary " />
               </div>
-              <h1 className="text-2xl font-bold mt-2">Log In</h1>
-              <p className="text-base-content/60 text-xl text-primary">
+              <h1 className="sm:text-2xl text-[5vw] font-bold mt-2">Log In</h1>
+              <p className="text-base-content/60 sm:text-xl text-[4vw] text-primary text-center">
                 Get back to your account. Your connections are waiting!
               </p>
             </div>

@@ -61,6 +61,10 @@ export const useChatStore = create((set,get)=>({
         if(!selectedUser) return;
 
         const socket = useAuthStore.getState().socket;
+        if(!socket){
+            console.error("Socket is not connected");
+            return;
+        }
         socket.on("newMessage", (newMessage)=>{
             if(newMessage.senderId !== selectedUser._id) return;
             set({
@@ -71,6 +75,7 @@ export const useChatStore = create((set,get)=>({
 
     unsubscribeFromMessages: ()=>{
         const socket = useAuthStore.getState().socket;
+        
         if(!socket) return;
         socket.off("newMessage");
     },
